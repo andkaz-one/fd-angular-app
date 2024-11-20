@@ -1,0 +1,41 @@
+<div class="grid">
+    <div class="col-12">
+        @if (data$ | async; as data) {
+            <div class="p-2">
+                <p-table #dt 
+                    [value]="data"
+                    styleClass="p-datatable-sm"
+                    responsiveLayout="stack"
+                    [tableStyle]="{'min-width': '50rem'}">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="deviceId">Device ID <p-sortIcon field="deviceId"/></th>
+                        <th pSortableColumn="eventDate">Event date <p-sortIcon field="eventDate"/></th>
+                        <th pSortableColumn="type">Event type <p-sortIcon field="type"/></th>
+                        <th>Actions</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item >
+                    <tr>
+                        <td>{{item.deviceId}}</td>
+                        <td>{{item.eventDate | date}}</td>
+                        <td><p-tag>{{item.type}}</p-tag></td>
+                        <td>
+                            <button pButton
+                                    icon="pi pi-info"
+                                    class="p-button-outlined"
+                                    (click)="showDetails(item)">
+                            </button>
+                        </td>
+                    </tr>
+                </ng-template>
+    
+            </p-table>
+
+            </div>
+            
+
+        }
+        
+    </div>
+</div>

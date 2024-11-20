@@ -1,29 +1,50 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterOutlet } from '@angular/router';
+import { of } from 'rxjs';
+import { MenubarModule } from 'primeng/menubar';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { AppComponent } from './app.component';
+import { EventService } from './service/event.service';
 
 describe('AppComponent', () => {
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+  let eventService: EventService;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      declarations: [AppComponent],
+      imports: [RouterOutlet, MenubarModule, ProgressBarModule],
+      providers: [
+        {
+          provide: EventService,
+          useValue: {
+            isLoadingSignal: of(false),
+          },
+        },
+      ],
     }).compileComponents();
-  });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it(`should have the 'iot-event-list' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('iot-event-list');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    eventService = TestBed.inject(EventService);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, iot-event-list');
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should display the menu item', () => {
+    const menuItemElement: HTMLElement = fixture.nativeElement.querySelector('p-menubaritem');
+    expect(menuItemElement.textContent).toContain('Events List');
+  });
+
+  it('should display the progress bar when loading', () => {
+    eventService.isLoadingSignal.set(true);
+    fixture.detectChanges();
+
+    const progressBarElement: HTMLElement = fixture.nativeElement.querySelector('p-progressBar');
+    expect(progressBarElement).toBeTruthy();
   });
 });

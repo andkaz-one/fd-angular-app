@@ -1,0 +1,5 @@
+<div>
+    @for (item of detailsData | keyvalue; track item) {
+        <p>{{item.key | formatProp}} : <span>{{item.value}}</span></p>
+    }
+</div>
